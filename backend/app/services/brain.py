@@ -102,9 +102,7 @@ class BrainService:
 
     def _smart_fallback(self, text: str) -> str:
         t = text.lower().strip()
-        if re.search(
-            r"^(hi|hello|hey|namaste|namaskar|kya haal|kaise ho|kaise hain|jarvis)\b", t
-        ):
+        if re.search(r"^(hi|hello|hey|namaste|namaskar|halo|hallo)\b|jarvis", t):
             return self.CAPABILITIES_HI
         if re.search(r"(kya kar|what can you|kya capability|kaise madad|how can you help|tumhara kaam)", t):
             return self.CAPABILITIES_HI
@@ -112,9 +110,12 @@ class BrainService:
             return "Main Jarvis hoon, aapka AI voice assistant. Hindi, English aur Hinglish - sab samajh leta hoon. Bataiye, kya kaam hai?"
         if re.search(r"(shukriya|thank|dhanyavaad|thanks)", t):
             return "Aapka swagat hai! Aur kuch poochhna ho to bataiye."
+        if re.search(r"(kaise ho|how are you|kya haal)", t):
+            return "Main bilkul theek hoon! Aap bataiye, kaise madad karoon?"
         return (
-            f"Achha sawaal '{text}'. Bina API key ke main sirf basic kaam kar sakta hoon. "
-            "OPENAI_API_KEY set karke aap mujhse kisi bhi topic par Hindi mein baat kar sakte hain."
+            "Hmm, main samajhne ki koshish kar raha hoon. Filhaal free mode mein main basic sawaalon ke "
+            "jawab de sakta hoon - time, weather, google search, email search. Behtar AI jawab ke liye "
+            "OPENAI_API_KEY set karein. Aap kya jaanna chahte hain?"
         )
 
 

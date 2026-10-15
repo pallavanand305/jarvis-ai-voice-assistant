@@ -18,8 +18,9 @@ async def speech_to_text(file: UploadFile = File(...)):
     data = await file.read()
     if not data:
         raise HTTPException(status_code=400, detail="empty audio file")
+    suffix = "." + (file.filename or "audio.webm").rsplit(".", 1)[-1]
     try:
-        text = stt.transcribe(data, suffix=".wav")
+        text = stt.transcribe(data, suffix=suffix)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"transcription failed: {e}")
     return {"text": text}
@@ -45,7 +46,8 @@ async def voice_chat(file: UploadFile = File(...), language: str = "auto"):
     if not data:
         raise HTTPException(status_code=400, detail="empty audio file")
     try:
-        text = stt.transcribe(data, suffix=".wav")
+        suffix = "." + (file.filename or "audio.webm").rsplit(".", 1)[-1]
+        text = stt.transcribe(data, suffix=suffix)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"transcription failed: {e}")
     history = [{"role": "user", "content": text}]

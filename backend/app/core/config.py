@@ -12,7 +12,7 @@ class Settings(BaseSettings):
     OPENWEATHERMAP_API_KEY: str | None = None
     WAKE_WORD: str = "hey jarvis"
     DATABASE_URL: str = "sqlite:///./jarvis.db"
-    WHISPER_MODEL: str = "base"
+    WHISPER_MODEL: str = "small"
     TTS_ENGINE: str = "edge-tts"
     TTS_VOICE: str = "en-US-AriaNeural"
     TTS_VOICE_HI: str = "hi-IN-SwaraNeural"

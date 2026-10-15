@@ -5,6 +5,35 @@ export interface HistoryRow {
   created_at?: string
 }
 
+const SILENT_WAV =
+  'data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAIA+AAACABAAZGF0YQAAAAA='
+
+const player: HTMLAudioElement | null = typeof Audio !== 'undefined' ? new Audio() : null
+let unlocked = false
+
+export function unlockAudio(): void {
+  if (!player || unlocked) return
+  try {
+    player.muted = true
+    player.src = SILENT_WAV
+    const p = player.play()
+    if (p && typeof p.then === 'function') {
+      p.then(() => {
+        player.pause()
+        player.muted = false
+        unlocked = true
+      }).catch(() => {
+        player.muted = false
+      })
+    } else {
+      player.muted = false
+      unlocked = true
+    }
+  } catch {
+    player.muted = false
+  }
+}
+
 async function jsonOrThrow(res: Response): Promise<any> {
   const body = await res.json().catch(() => ({}))
   if (!res.ok) {
@@ -46,16 +75,24 @@ export async function speakText(text: string, lang = 'auto'): Promise<void> {
   }
   const blob = await res.blob()
   const url = URL.createObjectURL(blob)
-  const audio = new Audio(url)
-  await audio.play()
-  await new Promise<void>((resolve) => {
+  const audio = player || new Audio()
+  audio.muted = false
+  audio.src = url
+  await new Promise<void>((resolve, reject) => {
     audio.onended = () => {
       URL.revokeObjectURL(url)
       resolve()
     }
     audio.onerror = () => {
       URL.revokeObjectURL(url)
-      resolve()
+      reject(new Error('audio playback failed'))
+    }
+    const p = audio.play()
+    if (p && typeof p.catch === 'function') {
+      p.catch((e: unknown) => {
+        URL.revokeObjectURL(url)
+        reject(e instanceof Error ? e : new Error('autoplay blocked'))
+      })
     }
   })
 }

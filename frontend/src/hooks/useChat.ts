@@ -48,8 +48,8 @@ export function useChat() {
         setAvatarState('speaking')
         try {
           await speakText(reply)
-        } catch {
-          /* TTS optional */
+        } catch (e) {
+          setError(e instanceof Error ? `Voice playback: ${e.message}` : 'voice playback failed')
         }
         setAvatarState('idle')
       } catch (e) {

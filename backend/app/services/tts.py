@@ -19,7 +19,12 @@ class TTSService:
     def _edge(self, text: str, lang: str) -> bytes:
         import edge_tts
 
-        voice = settings.TTS_VOICE_HI if lang.startswith("hi") else settings.TTS_VOICE
+        has_devanagari = any("\u0900" <= ch <= "\u097F" for ch in text)
+        voice = (
+            settings.TTS_VOICE_HI
+            if (lang.startswith("hi") or has_devanagari)
+            else settings.TTS_VOICE
+        )
 
         async def run() -> bytes:
             communicate = edge_tts.Communicate(text, voice)

@@ -17,14 +17,24 @@ A Jarvis-style AI voice assistant with an animated anime avatar, Hindi/Hinglish/
 ## Features
 
 - Real-time microphone input with voice responses
+- **Two-way voice mode** — Jarvis auto-listens again after every reply
+- **Voice-only mode** — pure spoken conversation, minimal text on screen
 - Hindi, Hinglish and English conversations
-- Animated anime-style avatar with synchronized states
+- Animated anime-style avatar with synchronized states (idle/listening/thinking/speaking)
+- Automatic silence detection (stops recording when you pause)
 - Text chat fallback
 - Conversation memory with clear controls
-- Modular tools: time, weather, web search
+- Modular tools: time, weather, web search, email search
 - Optional wake-word support ("Hey Jarvis")
 - Secure API key management via environment variables
 - Docker support, logging, error handling, automated tests
+
+## Voice Interaction Tips
+
+- Click **Two-way** to start a hands-free conversation. Jarvis listens, answers out loud, then listens again.
+- Click **Voice only** to hide the text bubbles and keep just the avatar.
+- If the browser blocks playback, click **Mic** once (this unlocks audio), then speak.
+- Hindi replies use the `hi-IN-SwaraNeural` voice automatically.
 
 ## Quick Start
 
