@@ -2,7 +2,7 @@
 from fastapi.responses import Response
 from ..services.stt import stt
 from ..services.tts import tts
-from ..services.llm import llm
+from ..services.brain import brain
 from .. import memory as db
 from pydantic import BaseModel
 from typing import List, Dict
@@ -49,6 +49,7 @@ async def voice_chat(file: UploadFile = File(...), language: str = "auto"):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"transcription failed: {e}")
     history = [{"role": "user", "content": text}]
-    reply = llm.generate(history)
+    reply = brain.respond(text, history)
     db.save_conversation(text, reply, language)
     return {"transcript": text, "response": reply, "language": language}
+

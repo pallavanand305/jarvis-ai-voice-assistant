@@ -7,3 +7,4 @@ dist/
 .venv/
 venv/
 data/
+tsconfig.tsbuildinfo

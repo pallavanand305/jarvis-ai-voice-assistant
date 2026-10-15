@@ -1,6 +1,6 @@
 ﻿from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
-from ..services.llm import llm
+from ..services.brain import brain
 from .. import memory as db
 from typing import List, Dict
 
@@ -20,8 +20,7 @@ async def chat(req: ChatRequest):
     if not req.message.strip():
         raise HTTPException(status_code=400, detail="message is required")
     history = req.history[-10:]
-    history.append({"role": "user", "content": req.message})
-    reply = llm.generate(history)
+    reply = brain.respond(req.message, history)
     db.save_conversation(req.message, reply, req.language)
     return ChatResponse(response=reply, language=req.language)
 
